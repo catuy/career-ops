@@ -30,12 +30,12 @@ The skill applies with EQUAL rigor to ALL target roles. None is primary or secon
 
 | Archetype | Thematic axes | What they buy |
 |-----------|---------------|---------------|
-| **AI Platform / LLMOps Engineer** | Evaluation, observability, reliability, pipelines | Someone who puts AI in production with metrics |
-| **Agentic Workflows / Automation** | HITL, tooling, orchestration, multi-agent | Someone who builds reliable agent systems |
-| **Technical AI Product Manager** | GenAI/Agents, PRDs, discovery, delivery | Someone who translates business to AI product |
-| **AI Solutions Architect** | Hyperautomation, enterprise, integrations | Someone who designs end-to-end AI architectures |
-| **AI Forward Deployed Engineer** | Client-facing, fast delivery, prototyping | Someone who delivers AI solutions to clients fast |
-| **AI Transformation Lead** | Change management, adoption, org enablement | Someone who leads AI transformation in an org |
+| **Senior/Lead Product Designer** | Product strategy, UX/UI, design systems, accessibility, user research | Someone who owns the full design process from discovery to delivery |
+| **Design Engineer / Creative Technologist** | Design + code, React, data viz, creative coding, prototyping | Someone who designs AND builds — no handoff needed |
+| **UX Lead / Design Strategist** | UX strategy, institutional platforms, public sector, transformation | Someone who brings clarity to complex systems at scale |
+| **Design Systems Lead** | Component libraries, tokens, Figma, Storybook, scalability | Someone who builds the design infrastructure teams rely on |
+| **Design Director** | Art direction, team leadership, brand, multi-product oversight | Someone who elevates design quality across an organization |
+| **Product Designer (IC)** | End-to-end product design, flows, prototyping, iteration | Someone who ships excellent product work autonomously |
 
 <!-- [CUSTOMIZE] Edit the archetypes above to match YOUR target roles.
      For example, if you're a backend engineer, replace with:
@@ -50,12 +50,12 @@ The skill applies with EQUAL rigor to ALL target roles. None is primary or secon
 
 | If the role is... | Emphasize about the candidate... | Proof point sources |
 |-------------------|----------------------------------|---------------------|
-| Platform / LLMOps | Production systems builder, observability, evals, closed-loop | article-digest.md + cv.md |
-| Agentic / Automation | Multi-agent orchestration, HITL, reliability, cost | article-digest.md + cv.md |
-| Technical AI PM | Product discovery, PRDs, metrics, stakeholder mgmt | cv.md + article-digest.md |
-| Solutions Architect | System design, integrations, enterprise-ready | article-digest.md + cv.md |
-| Forward Deployed Engineer | Fast delivery, client-facing, prototype to prod | cv.md + article-digest.md |
-| AI Transformation Lead | Change management, team enablement, adoption | cv.md + article-digest.md |
+| Senior/Lead Product Designer | 15+ years design + code, design systems at ClassWallet & ANII, UX strategy for IDB | cv.md |
+| Design Engineer / Creative Technologist | React, data viz (UNESCO), creative coding (p5.js), ships design AND code | cv.md |
+| UX Lead / Design Strategist | 9 years transforming ANII ecosystem, IDB UX lead, public sector at scale | cv.md |
+| Design Systems Lead | ClassWallet design system, ANII design system, Storybook, component architecture | cv.md |
+| Design Director | Venice Biennale, international exhibitions, 10+ years teaching, brand & art direction | cv.md |
+| Product Designer (IC) | End-to-end delivery, fintech (ClassWallet), media (Brecha, Búsqueda), data platforms | cv.md |
 
 <!-- [CUSTOMIZE] Map YOUR specific projects/articles to each archetype above -->
 
@@ -69,19 +69,24 @@ The skill applies with EQUAL rigor to ALL target roles. None is primary or secon
 
 Use the candidate's exit story from `config/profile.yml` to frame ALL content:
 - **In PDF Summaries:** Bridge from past to future -- "Now applying the same [skill] to [JD domain]."
-- **In STAR stories:** Reference proof points from article-digest.md
+- **In STAR stories:** Reference proof points from cv.md
 - **In Draft Answers (Section G):** The transition narrative should appear in the first response.
-- **When the JD asks for "entrepreneurial", "ownership", "builder", "end-to-end":** This is the #1 differentiator. Increase match weight.
+- **When the JD asks for "end-to-end", "full-stack", "design + code", "ownership":** This is the #1 differentiator. Increase match weight.
+- **When the JD is public sector, civic tech, research, science, education, international orgs:** Boost score — this is where the candidate resonates most and has deepest experience.
+- **When the JD is purely commercial/marketing with no social impact angle:** Score honestly but note it's not the candidate's preferred domain.
 
 ### Cross-cutting Advantage
 
-Frame profile as **"Technical builder with real-world proof"** that adapts framing to the role:
-- For PM: "builder who reduces uncertainty with prototypes then productionizes with discipline"
-- For FDE: "builder who delivers fast with observability and metrics from day 1"
-- For SA: "builder who designs end-to-end systems with real integration experience"
-- For LLMOps: "builder who puts AI in production with closed-loop quality systems"
+Frame profile as **"Full-Stack Designer who bridges strategy, design, and code"** that adapts framing to the role:
+- For Product Designer: "designer who owns the full loop — research, design, code, ship"
+- For Design Engineer: "designer who writes production React — no handoff gap"
+- For UX Lead: "designer who brings clarity to institutional complexity at national scale"
+- For Design Systems: "designer who builds the infrastructure that scales design across teams"
+- For Design Director: "designer with 15+ years, international recognition, and teaching depth"
 
-Convert "builder" into a professional signal, not a "hobby maker". Real proof points make this credible.
+Convert "full-stack designer" into a professional signal: not "jack of all trades" but "end-to-end ownership with depth in both design and code". Real proof points make this credible.
+
+**Academic & public service angle:** The candidate's decade of university teaching, science research collaboration, and public sector work is a rare differentiator. For roles at NGOs, governments, research institutions, and education — this is the strongest card. Play it.
 
 ### Portfolio as Proof Point (use in high-value applications)
 
