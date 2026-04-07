@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>career-ops</title>
+  <script>
+    // Prevent flash — apply theme before render
+    const t = localStorage.getItem('career-ops-theme') || 'system'
+    const r = t === 'system' ? (matchMedia('(prefers-color-scheme:dark)').matches ? 'dark' : 'light') : t
+    document.documentElement.setAttribute('data-theme', r)
+  </script>
+</head>
+<body class="antialiased">
+  <div id="root"></div>
+  <script type="module" src="/src/main.tsx"></script>
+</body>
+</html>

@@ -1,0 +1,199 @@
+@import "tailwindcss";
+
+/* =============================================
+   Flexoki — https://stephango.com/flexoki
+   ============================================= */
+
+:root, [data-theme="light"] {
+  --bg:       #FFFCF0;
+  --bg-2:     #F2F0E5;
+  --ui:       #E6E4D9;
+  --ui-2:     #CECDC3;
+  --ui-3:     #B7B5AC;
+  --tx-3:     #878580;
+  --tx-2:     #6F6E69;
+  --tx:       #403E3C;
+  --tx-h:     #1C1B1A;
+
+  --red:      #D14D41;
+  --orange:   #DA702C;
+  --yellow:   #D0A215;
+  --green:    #879A39;
+  --cyan:     #3AA99F;
+  --blue:     #4385BE;
+  --purple:   #8B7EC8;
+  --magenta:  #CE5D97;
+}
+
+[data-theme="dark"] {
+  --bg:       #100F0F;
+  --bg-2:     #1C1B1A;
+  --ui:       #282726;
+  --ui-2:     #403E3C;
+  --ui-3:     #575653;
+  --tx-3:     #878580;
+  --tx-2:     #9F9D96;
+  --tx:       #CECDC3;
+  --tx-h:     #F2F0E5;
+
+  --red:      #AF3029;
+  --orange:   #BC5215;
+  --yellow:   #AD8301;
+  --green:    #66800B;
+  --cyan:     #24837B;
+  --blue:     #205EA6;
+  --purple:   #5E409D;
+  --magenta:  #A02F6F;
+}
+
+/* =============================================
+   Base
+   ============================================= */
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Inter', 'Segoe UI', system-ui, sans-serif;
+  background: var(--bg);
+  color: var(--tx);
+  -webkit-font-smoothing: antialiased;
+}
+
+::selection { background: color-mix(in srgb, var(--cyan) 25%, transparent); }
+
+::-webkit-scrollbar { width: 8px; height: 8px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: var(--ui-2); border-radius: 4px; }
+::-webkit-scrollbar-thumb:hover { background: var(--tx-3); }
+
+/* =============================================
+   Layout primitives
+   ============================================= */
+
+.card {
+  background: var(--bg-2);
+  border: 1px solid var(--ui);
+  border-radius: 8px;
+}
+
+.input {
+  background: var(--bg);
+  border: 1px solid var(--ui);
+  color: var(--tx);
+  border-radius: 6px;
+  padding: 6px 12px;
+  font-size: 13px;
+  outline: none;
+  transition: border-color 0.15s;
+}
+.input::placeholder { color: var(--tx-3); }
+.input:focus { border-color: var(--cyan); }
+
+.pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 2px 10px;
+  border-radius: 4px;
+  font-size: 12px;
+  font-weight: 500;
+  background: var(--ui);
+  color: var(--tx-2);
+}
+
+.pill-accent {
+  background: color-mix(in srgb, var(--cyan) 12%, var(--bg));
+  color: var(--cyan);
+}
+
+/* =============================================
+   Data table
+   ============================================= */
+
+.data-table { width: 100%; font-size: 13px; border-collapse: collapse; }
+.data-table th {
+  text-align: left;
+  padding: 8px 16px;
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--tx-3);
+  border-bottom: 1px solid var(--ui);
+}
+.data-table td { padding: 10px 16px; color: var(--tx); }
+.data-table tbody tr { border-bottom: 1px solid var(--ui); transition: background 0.1s; }
+.data-table tbody tr:last-child { border-bottom: none; }
+.data-table tbody tr:hover { background: color-mix(in srgb, var(--ui) 40%, transparent); }
+
+/* =============================================
+   Report sections
+   ============================================= */
+
+.report-section table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 16px 0;
+  font-size: 13px;
+  line-height: 1.6;
+}
+
+.report-section table:has(th:nth-child(3)) { table-layout: auto; }
+
+.report-section thead tr { border-bottom: 2px solid var(--ui); }
+
+.report-section th {
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--tx-3);
+  padding: 8px 12px;
+  text-align: left;
+}
+
+.report-section td {
+  padding: 8px 12px;
+  color: var(--tx);
+  border-bottom: 1px solid var(--ui);
+  vertical-align: top;
+  word-break: break-word;
+  overflow-wrap: break-word;
+}
+
+.report-section tbody tr:last-child td { border-bottom: none; }
+.report-section tbody tr:hover { background: color-mix(in srgb, var(--ui) 30%, transparent); }
+.report-section td strong { color: var(--tx-h); font-weight: 600; }
+
+/* 2-col: first col is label */
+.report-section td:first-child {
+  font-weight: 600;
+  color: var(--tx-h);
+  white-space: nowrap;
+  width: 22%;
+  min-width: 120px;
+}
+.report-section td:last-child { white-space: normal; }
+
+/* 3+ col: relax */
+.report-section table:has(th:nth-child(3)) td:first-child {
+  width: auto; min-width: 100px; white-space: normal;
+}
+
+/* Lists */
+.report-section ul { padding-left: 20px; margin: 8px 0; }
+.report-section ol { padding-left: 22px; margin: 8px 0; list-style-type: decimal; }
+.report-section li { color: var(--tx); font-size: 13px; line-height: 1.75; margin-bottom: 2px; }
+.report-section li strong { color: var(--tx-h); font-weight: 600; }
+
+/* Headings */
+.report-section h2 { font-size: 14px; font-weight: 700; color: var(--tx-h); margin: 28px 0 10px; padding-bottom: 6px; border-bottom: 1px solid var(--ui); }
+.report-section h2:first-child { margin-top: 0; }
+.report-section h3 { font-size: 13px; font-weight: 700; color: var(--tx-h); margin: 20px 0 6px; }
+.report-section h4 { font-size: 13px; font-weight: 600; color: var(--cyan); margin: 16px 0 4px; }
+
+/* Prose */
+.report-section p { font-size: 13px; line-height: 1.75; color: var(--tx); margin: 6px 0; }
+.report-section a { color: var(--blue); text-decoration: underline; text-underline-offset: 2px; }
+.report-section a:hover { color: var(--cyan); }
+.report-section blockquote { border-left: 2px solid var(--ui-2); padding-left: 16px; margin: 12px 0; color: var(--tx-2); font-style: italic; }
+.report-section code { background: var(--ui); color: var(--tx-h); padding: 1px 5px; border-radius: 3px; font-size: 12px; }
+.report-section hr { border: none; border-top: 1px solid var(--ui); margin: 24px 0; }
