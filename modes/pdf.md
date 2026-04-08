@@ -32,24 +32,27 @@
 
 ## Diseño del PDF
 
-- **Fonts**: Space Grotesk (headings, 600-700) + DM Sans (body, 400-500)
-- **Fonts self-hosted**: `fonts/`
-- **Header**: nombre en Space Grotesk 24px bold + línea gradiente `linear-gradient(to right, hsl(187,74%,32%), hsl(270,70%,45%))` 2px + fila de contacto
-- **Section headers**: Space Grotesk 13px, uppercase, letter-spacing 0.05em, color cyan primary
-- **Body**: DM Sans 11px, line-height 1.5
-- **Company names**: color accent purple `hsl(270,70%,45%)`
-- **Márgenes**: 0.6in
-- **Background**: blanco puro
+- **Font**: Inter (Google Fonts, loaded via @import in template)
+- **Base size**: 10px, font-weight 500 (medium) for body, 700 for labels/titles
+- **Summary**: 14px, weight 500, letter-spacing -0.28px
+- **Layout**: Label-left (148px fixed) + content-right. NOT single column — it's a two-column label/content layout.
+- **Header**: Name (10px bold, 148px) | Contact (10px bold, flex) | Portfolio link (10px bold, right)
+- **Tags**: Pill-style with 1px black border, border-radius 100px, 9px text
+- **Colors**: Black (#000) only. Period dates in rgba(0,0,0,0.4). No accent colors.
+- **Pages**: A4 (595×842px / 210×297mm) or Letter (8.5×11in). Padding 10px.
+- **Background**: White
 
-## Orden de secciones (optimizado "6-second recruiter scan")
+## Section order (optimized for recruiter scan)
 
-1. Header (nombre grande, gradiente, contacto, link portfolio)
-2. Professional Summary (3-4 líneas, keyword-dense)
-3. Core Competencies (6-8 keyword phrases en flex-grid)
-4. Work Experience (cronológico inverso)
-5. Projects (top 3-4 más relevantes)
-6. Education & Certifications
-7. Skills (idiomas + técnicos)
+1. Header (name + contact + portfolio link)
+2. Subtitle (optional — "Application for [Role] – [Company]")
+3. Summary/Bio (14px, 2-3 paragraphs, keyword-dense)
+4. Education (one line)
+5. Core Competencies (tag pills with JD keywords)
+6. Experience Highlights (1-2 most relevant on page 1)
+7. Experience continued (remaining on page 2+)
+8. Projects (optional, top 3-4)
+9. Skills (optional)
 
 ## Estrategia de keyword injection (ético, basado en verdad)
 
@@ -62,33 +65,57 @@ Ejemplos de reformulación legítima:
 
 ## Template HTML
 
-Usar el template en `cv-template.html`. Reemplazar los placeholders `{{...}}` con contenido personalizado:
+Usar el template en `templates/cv-template.html`. Design: Inter font, 10px base, label-left (148px) + content-right layout, tags with pill borders, A4 pages.
 
-| Placeholder | Contenido |
-|-------------|-----------|
-| `{{LANG}}` | `en` o `es` |
-| `{{PAGE_WIDTH}}` | `8.5in` (letter) o `210mm` (A4) |
-| `{{NAME}}` | (from profile.yml) |
-| `{{EMAIL}}` | (from profile.yml) |
-| `{{LINKEDIN_URL}}` | [from profile.yml] |
-| `{{LINKEDIN_DISPLAY}}` | [from profile.yml] |
-| `{{PORTFOLIO_URL}}` | [from profile.yml] (o /es según idioma) |
-| `{{PORTFOLIO_DISPLAY}}` | [from profile.yml] (o /es según idioma) |
-| `{{LOCATION}}` | [from profile.yml] |
-| `{{SECTION_SUMMARY}}` | Professional Summary / Resumen Profesional |
-| `{{SUMMARY_TEXT}}` | Summary personalizado con keywords |
-| `{{SECTION_COMPETENCIES}}` | Core Competencies / Competencias Core |
-| `{{COMPETENCIES}}` | `<span class="competency-tag">keyword</span>` × 6-8 |
-| `{{SECTION_EXPERIENCE}}` | Work Experience / Experiencia Laboral |
-| `{{EXPERIENCE}}` | HTML de cada trabajo con bullets reordenados |
-| `{{SECTION_PROJECTS}}` | Projects / Proyectos |
-| `{{PROJECTS}}` | HTML de top 3-4 proyectos |
-| `{{SECTION_EDUCATION}}` | Education / Formación |
-| `{{EDUCATION}}` | HTML de educación |
-| `{{SECTION_CERTIFICATIONS}}` | Certifications / Certificaciones |
-| `{{CERTIFICATIONS}}` | HTML de certificaciones |
-| `{{SECTION_SKILLS}}` | Skills / Competencias |
-| `{{SKILLS}}` | HTML de skills |
+### Placeholders
+
+| Placeholder | Content |
+|-------------|---------|
+| `{{LANG}}` | `en` or `es` |
+| `{{PAGE_WIDTH}}` | `8.5in` (letter) or `210mm` (A4) |
+| `{{PAGE_HEIGHT}}` | `11in` (letter) or `297mm` (A4) |
+| `{{NAME}}` | from profile.yml |
+| `{{EMAIL}}` | from profile.yml |
+| `{{PORTFOLIO_URL}}` | from profile.yml |
+| `{{PORTFOLIO_DISPLAY}}` | from profile.yml (display text) |
+| `{{LOCATION}}` | from profile.yml |
+| `{{SUBTITLE_SECTION}}` | Optional. For targeted applications: `<div class="section-row"><div class="section-label">Curriculum Vitae</div><div class="subtitle">Application for [Role] – [Company]</div></div>` |
+| `{{SUMMARY_TEXT}}` | Bio/summary as `<p>` blocks with `<div class="spacer"></div>` between paragraphs. 14px, 500 weight. Inject JD keywords. |
+| `{{SECTION_EDUCATION}}` | "Relevant Education" or "Education" |
+| `{{EDUCATION}}` | Plain text: "2010 – Bachelor's Degree in Graphic Design – Universidad ORT Uruguay" |
+| `{{SECTION_COMPETENCIES}}` | "Core Competencies" |
+| `{{COMPETENCIES}}` | `<span class="tag">keyword</span>` × 6-10. Use JD vocabulary. |
+| `{{SECTION_EXPERIENCE}}` | "Experience Highlights" |
+| `{{EXPERIENCE_PAGE1}}` | First 1-2 experience blocks (fits page 1). See format below. |
+| `{{SECTION_EXPERIENCE_CONT}}` | "Experience (continued)" |
+| `{{EXPERIENCE_PAGE2}}` | Remaining experience blocks for page 2+. |
+| `{{PROJECTS_SECTION}}` | Optional. `<div class="section-row"><div class="section-label">Projects</div><div class="section-content"><div class="exp-list">...</div></div></div>` |
+| `{{SKILLS_SECTION}}` | Optional. `<div class="section-row"><div class="section-label">Skills</div><div class="section-content">...</div></div>` |
+
+### Experience block format
+
+```html
+<div class="exp-block">
+  <div class="exp-header">
+    <div class="exp-title">Role Title – Company Name</div>
+    <div class="exp-period">2023–Present | Remote</div>
+    <div class="exp-desc">Description with JD keywords injected naturally. 2-4 sentences.</div>
+  </div>
+  <div class="tags">
+    <span class="tag">Keyword 1</span>
+    <span class="tag">Keyword 2</span>
+  </div>
+</div>
+```
+
+### Project block format
+
+```html
+<div class="project-block">
+  <div class="project-title">Project Name</div>
+  <div class="project-desc">One-line description with key tech/outcome.</div>
+</div>
+```
 
 ## Post-generación
 
