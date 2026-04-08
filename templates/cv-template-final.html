@@ -1,0 +1,365 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Diego Cataldo - CV</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { background: #fff; margin: 0; padding: 0; font-family: 'Inter', sans-serif; color: #000; }
+  .page {
+    width: 100%; background: #fff; padding: 1.7%;
+    display: flex; flex-direction: column; gap: 5.5vw;
+    page-break-after: always;
+  }
+  .page:last-child { page-break-after: auto; }
+  a { color: #000; text-decoration: none; }
+  .header { display: flex; gap: 1.7%; align-items: flex-start; width: 100%; letter-spacing: -0.02em; }
+  .header .name { font-weight: 700; font-size: 1.68vw; line-height: 1.5; width: 25%; flex-shrink: 0; }
+  .header .contact { flex: 1; font-size: 1.68vw; font-weight: 700; line-height: 1.5; }
+  .header .contact a { color: #000; }
+  .header .site { font-weight: 700; font-size: 1.68vw; line-height: 1.5; flex-shrink: 0; }
+  .section-row { display: flex; gap: 1.7%; align-items: flex-start; width: 100%; }
+  .section-label { font-weight: 700; font-size: 1.68vw; line-height: 1.3; letter-spacing: -0.02em; width: 25%; flex-shrink: 0; }
+  .section-label.lh15 { line-height: 1.5; }
+  .section-content { flex: 0 1 82%; }
+  .subtitle { font-weight: 500; font-size: 1.68vw; line-height: 1.3; letter-spacing: -0.02em; }
+  .bio-row { display: flex; gap: 1.7%; align-items: flex-start; padding-bottom: 3vw; width: 100%; }
+  .bio-text { width: 72%; flex-shrink: 0; font-weight: 500; font-size: 2.35vw; line-height: 1.3; letter-spacing: -0.02em; }
+  .bio-text p { margin-bottom: 0; }
+  .bio-text .spacer { height: 2.35vw; }
+  .bio-img { flex: 1; align-self: stretch; position: relative; overflow: hidden; }
+  .bio-img img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+  .edu-text { font-weight: 500; font-size: 1.68vw; line-height: 1.3; letter-spacing: -0.02em; }
+  .exp-list { display: flex; flex-direction: column; gap: 2.8vw; }
+  .exp-block { display: flex; flex-direction: column; gap: 1.3vw; max-width: 82%; }
+  .exp-header { display: flex; flex-direction: column; gap: 0.6vw; font-size: 1.68vw; letter-spacing: -0.02em; }
+  .exp-title { font-weight: 700; line-height: 1.3; }
+  .exp-period { font-weight: 700; line-height: 1.3; color: rgba(0,0,0,0.4); }
+  .exp-desc { font-weight: 500; line-height: 1.3; font-size: 1.68vw; letter-spacing: -0.02em; }
+  .tags { display: flex; flex-wrap: wrap; gap: 0.84vw; }
+  .tag {
+    display: inline-flex; align-items: center; padding: 0 0.67vw;
+    border: 1px solid #000; border-radius: 100px;
+    font-weight: 500; font-size: 1.51vw; line-height: 1.5; letter-spacing: -0.02em; white-space: nowrap;
+  }
+  .list-text { font-weight: 500; font-size: 1.68vw; line-height: 1.5; letter-spacing: -0.02em; max-width: 82%; }
+  .ref-grid { display: flex; gap: 3%; }
+  .ref-item { flex: 1; }
+  .ref-name { font-weight: 700; font-size: 1.68vw; line-height: 1.3; }
+  .ref-role { font-weight: 700; font-size: 1.68vw; line-height: 1.3; color: rgba(0,0,0,0.4); }
+  .ref-link { font-weight: 500; font-size: 1.68vw; text-decoration: underline; }
+  /* Cover letter */
+  .letter-text { font-weight: 500; font-size: 1.68vw; line-height: 1.45; letter-spacing: -0.02em; max-width: 82%; }
+  .letter-text p { margin-bottom: 1.2vw; }
+  .letter-text p:last-child { margin-bottom: 0; }
+  .signature { margin-top: 4vw; }
+  .signature .sig-name { font-weight: 700; font-size: 1.68vw; }
+</style>
+</head>
+<body>
+
+<!-- PAGE 1 -->
+<div class="page">
+  <div class="header">
+    <div class="name">Diego Cataldo</div>
+    <div class="contact">
+      <a href="mailto:cataldo.diego@gmail.com">cataldo.diego@gmail.com</a><br>
+      S.Antuña 2667/202, Montevideo, Uruguay<br>
+      (598) 99 763 146
+    </div>
+    <a class="site" href="https://cataldo.pages.dev" target="_blank">cataldo.pages.dev</a>
+  </div>
+
+  <div class="section-row">
+    <div class="section-label">Curriculum Vitae</div>
+    <div class="subtitle">Application for Senior Product Designer -<br>Automattic</div>
+  </div>
+
+  <div class="bio-row">
+    <div class="bio-text">
+      <p>I'm a hybrid designer-developer with over 15 years of experience at the intersection of design, code, and open-source publishing. My work bridges user-centered strategy, visual communication, and front-end development to build inclusive, scalable, and impactful digital experiences.</p>
+      <div class="spacer"></div>
+      <p>I've built with WordPress for 15 years across 50+ projects for institutions, media outlets, and global brands. I integrate AI tools into my daily workflow, using Claude Code for prototyping, code generation, and design iteration. I've led design systems and UX strategies for national agencies, international organizations, and US fintech.</p>
+      <div class="spacer"></div>
+      <p>As a consultant and educator, I bring a strong ability to structure complexity into accessible and engaging tools. I believe in design as a vehicle for clarity, equity, and innovation.</p>
+    </div>
+    <div class="bio-img">
+      <img src="file:///Users/diego/www/career-ops/templates/photo.png" alt="Diego Cataldo">
+    </div>
+  </div>
+
+  <div class="section-row">
+    <div class="section-label">Relevant Education</div>
+    <div class="edu-text">2010 - Bachelor's Degree in Graphic Design - Universidad ORT Uruguay</div>
+  </div>
+
+  <div class="section-row">
+    <div class="section-label lh15">Experience Highlights</div>
+    <div class="section-content">
+      <div class="exp-list">
+        <div class="exp-block">
+          <div class="exp-header">
+            <div class="exp-title">Senior Product Designer (Consultant) - ClassWallet (US-based Fintech)</div>
+            <div class="exp-period">2023-Present | Remote</div>
+            <div class="exp-desc">I work as a Senior Product Designer for ClassWallet, a U.S.-based fintech focused on educational funding. My responsibilities include defining product strategy, designing complex user flows, and developing a cohesive design system aligned with business objectives. I collaborate closely with internal product and engineering teams to ensure design consistency, accessibility, and scalability across the platform.</div>
+          </div>
+          <div class="tags">
+            <span class="tag">Fintech</span>
+            <span class="tag">UX Strategy</span>
+            <span class="tag">Design Systems</span>
+            <span class="tag">Accessibility</span>
+            <span class="tag">Remote Collaboration</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- PAGE 2 -->
+<div class="page">
+  <div class="header">
+    <div class="name">Diego Cataldo</div>
+    <div class="contact">
+      <a href="mailto:cataldo.diego@gmail.com">cataldo.diego@gmail.com</a><br>
+      S.Antuña 2667/202, Montevideo, Uruguay<br>
+      (598) 99 763 146
+    </div>
+    <a class="site" href="https://cataldo.pages.dev" target="_blank">cataldo.pages.dev</a>
+  </div>
+
+  <div class="section-row">
+    <div class="section-label lh15">Experience (continued)</div>
+    <div class="section-content">
+      <div class="exp-list">
+
+        <div class="exp-block">
+          <div class="exp-header">
+            <div class="exp-title">UX Reference in Uruguay - Inter-American Development Bank (IDB)</div>
+            <div class="exp-period">2022 | Remote</div>
+            <div class="exp-desc">I served as a UX advisor for the Inter-American Development Bank's digital transformation initiatives in Uruguay. I provide expert guidance on usability and design strategy for public digital platforms, ensuring alignment with international standards and institutional impact goals.</div>
+          </div>
+          <div class="tags">
+            <span class="tag">International Cooperation</span>
+            <span class="tag">UX Strategy</span>
+            <span class="tag">Public Sector</span>
+            <span class="tag">Usability</span>
+            <span class="tag">Advisory</span>
+          </div>
+        </div>
+
+        <div class="exp-block">
+          <div class="exp-header">
+            <div class="exp-title">Senior UX Consultant - ANII (National Agency for Research and Innovation)</div>
+            <div class="exp-period">2014-2023 | Uruguay</div>
+            <div class="exp-desc">For nearly a decade, I have been a key UX consultant for ANII, Uruguay's national innovation agency. I led the redesign of their digital ecosystem, creating their design system and improving the usability of public-facing platforms. My work focused on accessibility, interface consistency, and user-centered improvements to support transparency and engagement in innovation funding processes.</div>
+          </div>
+          <div class="tags">
+            <span class="tag">Public Sector</span>
+            <span class="tag">UX Design</span>
+            <span class="tag">Design Systems</span>
+            <span class="tag">Accessibility</span>
+            <span class="tag">WordPress</span>
+          </div>
+        </div>
+
+        <div class="exp-block">
+          <div class="exp-header">
+            <div class="exp-title">Associate Professor - FADU, University of the Republic</div>
+            <div class="exp-period">2013-2023 | Uruguay</div>
+            <div class="exp-desc">For over 10 years, I taught final-year design projects at Uruguay's main public design school. I mentored students through complex, real-world challenges, served as a jury member for final evaluations, and contributed to academic and interdisciplinary research initiatives focused on innovation, communication, and design practice.</div>
+          </div>
+          <div class="tags">
+            <span class="tag">Design Education</span>
+            <span class="tag">Mentorship</span>
+            <span class="tag">Lecturer</span>
+            <span class="tag">Jury Participation</span>
+            <span class="tag">Research</span>
+          </div>
+        </div>
+
+        <div class="exp-block">
+          <div class="exp-header">
+            <div class="exp-title">Independent Consultant - Visual Communication & UX/UI</div>
+            <div class="exp-period">2005-Present | International</div>
+            <div class="exp-desc">As an independent consultant, I've designed and delivered digital experiences for a wide range of clients, including public institutions, NGOs, and global brands such as Wix, Coca-Cola, and Unilever. My work combines strategy, design, and technical execution, with a strong emphasis on design systems, dashboards, institutional portals, and creative tools.</div>
+          </div>
+          <div class="tags">
+            <span class="tag">WordPress</span>
+            <span class="tag">Consulting</span>
+            <span class="tag">Design + Code</span>
+            <span class="tag">Creative Tools</span>
+            <span class="tag">Open Source</span>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- PAGE 3 -->
+<div class="page">
+  <div class="header">
+    <div class="name">Diego Cataldo</div>
+    <div class="contact">
+      <a href="mailto:cataldo.diego@gmail.com">cataldo.diego@gmail.com</a><br>
+      S.Antuña 2667/202, Montevideo, Uruguay<br>
+      (598) 99 763 146
+    </div>
+    <a class="site" href="https://cataldo.pages.dev" target="_blank">cataldo.pages.dev</a>
+  </div>
+
+  <div class="section-row">
+    <div class="section-label">Core Skills</div>
+    <div class="section-content">
+      <div class="tags">
+        <span class="tag">UX/UI Design</span>
+        <span class="tag">Interaction Design</span>
+        <span class="tag">Prototyping (Figma)</span>
+        <span class="tag">Data Visualization</span>
+        <span class="tag">Design + Code</span>
+        <span class="tag">Design Systems and Documentation</span>
+        <span class="tag">Responsive & Accessible Interfaces (WCAG)</span>
+        <span class="tag">HTML5, CSS3, JavaScript (Frameworks)</span>
+        <span class="tag">AI-Assisted Design Workflows</span>
+        <span class="tag">WordPress</span>
+        <span class="tag">GitHub Collaboration + Dev Handoff</span>
+        <span class="tag">Strategic Communication for Public Sector</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="section-row">
+    <div class="section-label">Selected Exhibitions<br>& Awards</div>
+    <div class="section-content">
+      <div class="list-text">
+        2023 - Intl. Printmaking Biennial - Museu do Douro, Portugal<br>
+        2022 - Intl. Print Exhibit - National Taiwan Museum of Fine Arts, Taiwan<br>
+        2021 - "30 Seconds Museum" - Neo Shibuya, Tokyo<br>
+        2017 - Ibero-American Design Biennial - Plaza Matadero, Madrid<br>
+        2017 - Museum of Design and Fashion - MUDE, Lisbon<br>
+        2016 - Venice Architecture Biennale - Uruguay Pavilion, Venice<br>
+        2010 - Tipos Latinos Typography Biennial - Latin America<br>
+        2010 - American Design Awards - GDUSA, USA
+      </div>
+      <div class="tags" style="margin-top: 1.3vw;">
+        <span class="tag">Portugal</span>
+        <span class="tag">Taiwan</span>
+        <span class="tag">Mexico</span>
+        <span class="tag">Japan</span>
+        <span class="tag">USA</span>
+        <span class="tag">Spain</span>
+        <span class="tag">Italy</span>
+        <span class="tag">Latin America</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="section-row">
+    <div class="section-label">Publications & Talks</div>
+    <div class="section-content">
+      <div class="list-text">
+        2016 - Latam Congress of Interdisciplinary Higher Education - CCE, Uruguay<br>
+        2015-2023 - Final Project Jury - FADU, University of the Republic, Uruguay<br>
+        2013 - "ZM - Photographers and Poets" - Editorial Yauguru, Uruguay/Spain<br>
+        2011-2012 - Jury Member - FADU Visual Identity Competitions (Gen12/14), Uruguay<br>
+        2010 - "20x20 Designers Compilation" - Editorial Yauguru, Uruguay/Argentina<br>
+        2010 - "Typography in Uruguay" - ORT University, Uruguay<br>
+        2010 - "Web Design Index" - The Pepin Press, Netherlands
+      </div>
+    </div>
+  </div>
+
+  <div class="section-row">
+    <div class="section-label">Tools & Technologies</div>
+    <div class="section-content">
+      <div class="tags">
+        <span class="tag">Figma</span>
+        <span class="tag">Adobe Creative Suite</span>
+        <span class="tag">GitHub</span>
+        <span class="tag">HTML</span>
+        <span class="tag">CSS</span>
+        <span class="tag">JavaScript</span>
+        <span class="tag">p5.js</span>
+        <span class="tag">React</span>
+        <span class="tag">Claude Code</span>
+        <span class="tag">WordPress</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="section-row">
+    <div class="section-label">References</div>
+    <div class="section-content">
+      <div class="ref-grid">
+        <div class="ref-item">
+          <div class="ref-name">David Koplovitz</div>
+          <div class="ref-role">CTO ClassWallet</div>
+          <a class="ref-link" href="#">LinkedIn</a>
+        </div>
+        <div class="ref-item">
+          <div class="ref-name">Juanto Romang</div>
+          <div class="ref-role">VP Engineering ClassWallet</div>
+          <a class="ref-link" href="#">LinkedIn</a>
+        </div>
+        <div class="ref-item">
+          <div class="ref-name">Juan Possamay</div>
+          <div class="ref-role">IT Manager ANII</div>
+          <a class="ref-link" href="#">LinkedIn</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- PAGE 4 - MOTIVATION LETTER -->
+<div class="page">
+  <div class="header">
+    <div class="name">Diego Cataldo</div>
+    <div class="contact">
+      <a href="mailto:cataldo.diego@gmail.com">cataldo.diego@gmail.com</a><br>
+      S.Antuña 2667/202, Montevideo, Uruguay<br>
+      (598) 99 763 146
+    </div>
+    <a class="site" href="https://cataldo.pages.dev" target="_blank">cataldo.pages.dev</a>
+  </div>
+
+  <div class="section-row">
+    <div class="section-label">Motivation Letter</div>
+    <div class="subtitle">Application for Senior Product Designer -<br>Automattic</div>
+  </div>
+
+  <div class="section-row">
+    <div class="section-label">Montevideo, April 2026</div>
+    <div class="section-content">
+      <div class="letter-text">
+        <p><strong>Dear hiring team,</strong></p>
+
+        <p>I'm writing to express my interest in the Senior Product Designer role at Automattic. I've been building with WordPress for over 15 years, and the opportunity to contribute to the products and community that shaped my career feels like a natural fit.</p>
+
+        <p>I've spent the last two decades working at the intersection of design, code, and public service. As a UX consultant, I collaborated with Uruguay's National Innovation Agency (ANII) for nearly a decade on the design of public platforms and their institutional design system. More recently, I've worked with ClassWallet, a U.S.-based fintech, and advised the Inter-American Development Bank (IDB) on digital design for public services.</p>
+
+        <p>Alongside that, I've been teaching design at FADU/UDELAR, Uruguay's main public design school, which has given me a strong foundation in guiding design processes, mentoring others, and working with complex content. Your requirement for someone who can mentor the team on AI practices resonates with me. I integrate AI tools into my daily work, using Claude Code for prototyping, code generation, and design iteration.</p>
+
+        <p>I'm used to working remotely and collaboratively, using tools like Figma, GitHub, and Linear. My approach is practical and flexible, always looking for a balance between clarity, usability, and creative interaction.</p>
+
+        <p>I'm drawn to Automattic because of its mission to democratize publishing. Having built 50+ WordPress projects for institutions, media outlets, and brands, I've seen firsthand how the platform empowers people to share their stories. I'd love to contribute to that from the inside.</p>
+
+        <p>Thanks for considering my application. I'd be glad to contribute to this team and its products.</p>
+
+        <p>Best regards,</p>
+      </div>
+
+      <div class="signature">
+        <div class="sig-name">Diego Cataldo</div>
+        <img src="file:///Users/diego/www/career-ops/templates/signature.png" alt="Signature" style="width: 25vw; margin-top: 1.5vw;">
+      </div>
+    </div>
+  </div>
+</div>
+
+</body>
+</html>
