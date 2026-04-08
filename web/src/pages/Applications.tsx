@@ -3,7 +3,11 @@ import { Link } from 'react-router-dom'
 import { api, type Application } from '../lib/api'
 
 const STATUSES = ['Evaluada', 'Applied', 'Responded', 'Interview', 'Offer', 'Rejected', 'Discarded', 'SKIP']
+const HIDDEN_STATUSES = ['Discarded', 'SKIP', 'Descartado']
+const ACTIVE_STATUSES = STATUSES.filter(s => !HIDDEN_STATUSES.includes(s))
+
 type SortKey = 'num' | 'score' | 'date' | 'company' | 'status'
+type View = 'active' | 'archived'
 
 function Score({ value }: { value: number | null }) {
   if (value === null) return <span style={{ color: 'var(--tx-3)' }}>—</span>
@@ -15,9 +19,10 @@ export function Applications() {
   const [apps, setApps] = useState<Application[]>([])
   const [filter, setFilter] = useState('')
   const [statusFilter, setStatusFilter] = useState<string | null>(null)
-  const [sortBy, setSortBy] = useState<SortKey>('num')
+  const [sortBy, setSortBy] = useState<SortKey>('score')
   const [sortDir, setSortDir] = useState<'asc' | 'desc'>('desc')
   const [editing, setEditing] = useState<number | null>(null)
+  const [view, setView] = useState<View>('active')
   useEffect(() => { api.applications().then(setApps) }, [])
 
   const toggleSort = (key: SortKey) => {
@@ -25,7 +30,11 @@ export function Applications() {
     else { setSortBy(key); setSortDir('desc') }
   }
 
-  const filtered = apps
+  const activeApps = apps.filter(a => !HIDDEN_STATUSES.includes(a.status))
+  const archivedApps = apps.filter(a => HIDDEN_STATUSES.includes(a.status))
+  const baseApps = view === 'active' ? activeApps : archivedApps
+
+  const filtered = baseApps
     .filter(a => {
       if (statusFilter && a.status !== statusFilter) return false
       if (filter) { const q = filter.toLowerCase(); return a.company.toLowerCase().includes(q) || a.role.toLowerCase().includes(q) || a.notes.toLowerCase().includes(q) }
@@ -48,18 +57,34 @@ export function Applications() {
     setEditing(null)
   }
 
+  const filterStatuses = view === 'active' ? ACTIVE_STATUSES : HIDDEN_STATUSES
+
   return (
     <div className="space-y-5">
       <div className="flex items-center justify-between">
         <h1 style={{ color: 'var(--tx-h)' }} className="text-xl font-bold">Applications</h1>
-        <span style={{ color: 'var(--tx-3)' }} className="text-xs">{filtered.length} of {apps.length}</span>
+        <div className="flex items-center gap-3">
+          <span style={{ color: 'var(--tx-3)' }} className="text-xs">{filtered.length} shown</span>
+          <div className="flex gap-1">
+            <button onClick={() => { setView('active'); setStatusFilter(null) }}
+              className="px-2.5 py-1 rounded text-xs"
+              style={{ background: view === 'active' ? 'var(--ui)' : 'transparent', color: view === 'active' ? 'var(--tx-h)' : 'var(--tx-3)', fontWeight: view === 'active' ? 600 : 400 }}>
+              Active ({activeApps.length})
+            </button>
+            <button onClick={() => { setView('archived'); setStatusFilter(null) }}
+              className="px-2.5 py-1 rounded text-xs"
+              style={{ background: view === 'archived' ? 'var(--ui)' : 'transparent', color: view === 'archived' ? 'var(--tx-h)' : 'var(--tx-3)', fontWeight: view === 'archived' ? 600 : 400 }}>
+              Archived ({archivedApps.length})
+            </button>
+          </div>
+        </div>
       </div>
 
       <div className="flex gap-3 items-center flex-wrap">
         <input type="text" placeholder="Search..." value={filter} onChange={e => setFilter(e.target.value)} className="input w-56" />
         <div className="flex gap-1 flex-wrap">
           <button onClick={() => setStatusFilter(null)} className={`pill text-xs ${!statusFilter ? 'pill-accent' : ''}`}>All</button>
-          {STATUSES.map(s => (
+          {filterStatuses.map(s => (
             <button key={s} onClick={() => setStatusFilter(statusFilter === s ? null : s)} className={`pill text-xs ${statusFilter === s ? 'pill-accent' : ''}`}>{s}</button>
           ))}
         </div>

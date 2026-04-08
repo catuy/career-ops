@@ -2,7 +2,9 @@ import { useEffect, useState } from 'react'
 import { useParams, Link } from 'react-router-dom'
 import Markdown from 'react-markdown'
 import remarkGfm from 'remark-gfm'
-import { api } from '../lib/api'
+import { api, type Application } from '../lib/api'
+
+const STATUSES = ['Evaluada', 'Applied', 'Responded', 'Interview', 'Offer', 'Rejected', 'Discarded', 'SKIP']
 
 interface ReportMeta {
   company: string; role: string; date: string; archetype: string; score: number | null; url: string; pdf: string
@@ -53,11 +55,29 @@ export function ReportView() {
   const { filename } = useParams<{ filename: string }>()
   const [content, setContent] = useState<string | null>(null)
   const [error, setError] = useState(false)
+  const [app, setApp] = useState<Application | null>(null)
+  const [statusSaved, setStatusSaved] = useState(false)
+
+  // Extract report number from filename (e.g., "014-automattic..." → 14)
+  const reportNum = filename ? parseInt(filename.match(/^(\d+)/)?.[1] || '0') : 0
 
   useEffect(() => {
     if (!filename) return
     api.report(filename).then(r => setContent(r.content)).catch(() => setError(true))
+    // Find matching application
+    api.applications().then(apps => {
+      const match = apps.find(a => a.reportNum === String(reportNum).padStart(3, '0') || a.num === reportNum)
+      if (match) setApp(match)
+    })
   }, [filename])
+
+  const handleStatusChange = async (status: string) => {
+    if (!app) return
+    await api.updateApplication(app.num, { status })
+    setApp({ ...app, status })
+    setStatusSaved(true)
+    setTimeout(() => setStatusSaved(false), 2000)
+  }
 
   if (error) return <div className="text-center py-16"><p style={{ color: 'var(--red)' }}>Report not found</p><Link to="/applications" style={{ color: 'var(--blue)' }} className="text-sm hover:underline mt-2 inline-block">← Back</Link></div>
   if (content === null) return <div style={{ color: 'var(--tx-3)' }} className="text-sm py-16 text-center">Loading...</div>
@@ -81,7 +101,7 @@ export function ReportView() {
               <span className="pill-accent pill text-xs">{meta.archetype}</span>
               <span style={{ color: 'var(--tx-3)' }} className="text-xs">{meta.date}</span>
             </div>
-            <div className="flex gap-4 flex-wrap text-sm">
+            <div className="flex gap-4 flex-wrap text-sm items-center">
               {meta.url && (
                 <a href={meta.url} target="_blank" rel="noopener noreferrer" style={{ color: 'var(--blue)' }} className="hover:underline flex items-center gap-1">
                   <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
@@ -93,6 +113,20 @@ export function ReportView() {
                   <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
                   Download CV
                 </a>
+              )}
+              {app && (
+                <div className="flex items-center gap-2 ml-auto">
+                  <span style={{ color: 'var(--tx-3)' }} className="text-xs">Status:</span>
+                  <select
+                    value={app.status}
+                    onChange={e => handleStatusChange(e.target.value)}
+                    className="input text-xs py-1 px-2"
+                    style={{ minWidth: '120px' }}
+                  >
+                    {STATUSES.map(s => <option key={s} value={s}>{s}</option>)}
+                  </select>
+                  {statusSaved && <span style={{ color: 'var(--green)' }} className="text-xs">Saved</span>}
+                </div>
               )}
             </div>
           </div>
