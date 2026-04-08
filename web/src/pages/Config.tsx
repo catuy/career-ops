@@ -1,15 +1,15 @@
 import { useEffect, useState } from 'react'
 import { api, type PortalsConfig, type TrackedCompany } from '../lib/api'
 
-type Tab = 'companies' | 'filters' | 'profile' | 'tools'
+type Tab = 'commands' | 'companies' | 'filters' | 'profile' | 'tools'
 
 export function Config() {
-  const [tab, setTab] = useState<Tab>('companies')
+  const [tab, setTab] = useState<Tab>('commands')
   return (
     <div className="space-y-5">
       <h1 style={{ color: 'var(--tx-h)' }} className="text-xl font-bold">Configuration</h1>
       <nav className="flex gap-1">
-        {(['companies', 'filters', 'profile', 'tools'] as Tab[]).map(t => (
+        {(['commands', 'companies', 'filters', 'profile', 'tools'] as Tab[]).map(t => (
           <button key={t} onClick={() => setTab(t)}
             className="px-3 py-1.5 rounded text-sm capitalize"
             style={{ background: tab === t ? 'var(--ui)' : 'transparent', color: tab === t ? 'var(--tx-h)' : 'var(--tx-3)', fontWeight: tab === t ? 600 : 400 }}>
@@ -17,10 +17,62 @@ export function Config() {
           </button>
         ))}
       </nav>
+      {tab === 'commands' && <Commands />}
       {tab === 'companies' && <Companies />}
       {tab === 'filters' && <Filters />}
       {tab === 'profile' && <Profile />}
       {tab === 'tools' && <Tools />}
+    </div>
+  )
+}
+
+// --- Commands ---
+
+function Commands() {
+  const [copied, setCopied] = useState<string | null>(null)
+
+  const copy = (text: string, key: string) => {
+    navigator.clipboard.writeText(text)
+    setCopied(key)
+    setTimeout(() => setCopied(null), 2000)
+  }
+
+  const commands = [
+    { cmd: '/career-ops scan', desc: 'Scan all portals for new offers (uses Playwright)', primary: true },
+    { cmd: '/career-ops pipeline', desc: 'Process all pending URLs from pipeline' },
+    { cmd: '/career-ops {URL}', desc: 'Evaluate a single offer (full pipeline: report + PDF + tracker)', placeholder: true },
+    { cmd: '/career-ops apply {URL}', desc: 'Generate application form answers for an offer', placeholder: true },
+    { cmd: '/career-ops pdf {URL}', desc: 'Generate personalized CV + cover letter PDF', placeholder: true },
+    { cmd: '/career-ops batch', desc: 'Batch process with parallel workers' },
+    { cmd: '/career-ops oferta', desc: 'Evaluation only (blocks A-F, no PDF)' },
+    { cmd: '/career-ops ofertas', desc: 'Compare and rank multiple offers' },
+    { cmd: '/career-ops contacto', desc: 'LinkedIn outreach: find contacts + draft message' },
+    { cmd: '/career-ops deep', desc: 'Deep company research' },
+    { cmd: '/career-ops tracker', desc: 'Application status overview' },
+    { cmd: '/career-ops training', desc: 'Evaluate a course or certification' },
+    { cmd: '/career-ops project', desc: 'Evaluate a portfolio project idea' },
+  ]
+
+  return (
+    <div className="space-y-3">
+      <p style={{ color: 'var(--tx-3)' }} className="text-xs">Copy and paste these commands in your Claude Code terminal.</p>
+      {commands.map((c, i) => (
+        <div key={i} className="card px-4 py-3 flex items-center gap-3"
+          style={c.primary ? { borderLeft: '3px solid var(--green)' } : {}}>
+          <div className="flex-1 min-w-0">
+            <code style={{ color: 'var(--tx-h)', background: 'var(--ui)', padding: '2px 6px', borderRadius: '3px', fontSize: '12px' }}>{c.cmd}</code>
+            <span style={{ color: 'var(--tx-3)' }} className="text-xs ml-2">{c.desc}</span>
+          </div>
+          {!c.placeholder && (
+            <button onClick={() => copy(c.cmd, `cmd-${i}`)}
+              className="px-2.5 py-1 rounded text-xs font-medium flex items-center gap-1 flex-shrink-0"
+              style={{ background: copied === `cmd-${i}` ? 'var(--green)' : 'var(--ui)', color: copied === `cmd-${i}` ? '#fff' : 'var(--tx-h)' }}>
+              <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+              {copied === `cmd-${i}` ? 'Copied!' : 'Copy'}
+            </button>
+          )}
+        </div>
+      ))}
     </div>
   )
 }

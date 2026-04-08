@@ -204,6 +204,64 @@ export function ReportView() {
         const sectionBody = info ? sec.replace(/^## [A-G]\)[^\n]*\n/, '') : sec
         const isKeywords = /## Keywords/i.test(sec)
 
+        // Section G: Application answers with copy buttons
+        if (letter === 'G') {
+          const answers: { field: string; value: string }[] = []
+          const lines = sectionBody.split('\n')
+          let currentField = ''
+          let currentValue: string[] = []
+
+          for (const line of lines) {
+            const fieldMatch = line.match(/^###\s+(.+)/)
+            if (fieldMatch) {
+              if (currentField && currentValue.length) {
+                answers.push({ field: currentField, value: currentValue.join('\n').trim() })
+              }
+              currentField = fieldMatch[1]
+              currentValue = []
+            } else if (currentField) {
+              // Strip leading "> " from blockquotes
+              currentValue.push(line.replace(/^>\s?/, ''))
+            }
+          }
+          if (currentField && currentValue.length) {
+            answers.push({ field: currentField, value: currentValue.join('\n').trim() })
+          }
+
+          return (
+            <section key={i} id="section-G" className="card overflow-hidden"
+              style={{ borderLeft: `3px solid ${info!.color}` }}>
+              <div className="px-5 py-3 flex items-center gap-2" style={{ borderBottom: '1px solid var(--ui)' }}>
+                <span className="text-xs font-bold uppercase tracking-wider" style={{ color: info!.color }}>G)</span>
+                <span className="text-sm font-semibold" style={{ color: 'var(--tx-h)' }}>{info!.label}</span>
+              </div>
+              <div className="px-5 py-4 space-y-4">
+                {answers.map((a, j) => (
+                  <div key={j} className="rounded-lg overflow-hidden" style={{ border: '1px solid var(--ui)' }}>
+                    <div className="px-4 py-2 flex items-center justify-between" style={{ background: 'var(--bg-2)' }}>
+                      <span style={{ color: 'var(--tx-h)' }} className="text-xs font-bold">{a.field}</span>
+                      <button
+                        onClick={() => handleCopy(a.value, `answer-${j}`)}
+                        className="px-2 py-0.5 rounded text-xs font-medium flex items-center gap-1"
+                        style={{
+                          background: copied === `answer-${j}` ? 'var(--green)' : 'var(--ui)',
+                          color: copied === `answer-${j}` ? '#fff' : 'var(--tx-h)',
+                        }}
+                      >
+                        <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+                        {copied === `answer-${j}` ? 'Copied!' : 'Copy'}
+                      </button>
+                    </div>
+                    <div className="px-4 py-3" style={{ color: 'var(--tx)', fontSize: '1.68vw', lineHeight: 1.5, letterSpacing: '-0.02em' }}>
+                      <div style={{ fontSize: '13px', lineHeight: '1.6', whiteSpace: 'pre-wrap' }}>{a.value}</div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </section>
+          )
+        }
+
         if (isKeywords) {
           const kw = sec.split('\n')
             .filter((l: string) => l.trim().match(/^[-•]/) || l.includes(','))
