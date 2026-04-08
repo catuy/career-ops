@@ -1,6 +1,10 @@
 import { useEffect, useState, useCallback } from 'react'
 import { api, type PipelineData, type PipelineItem } from '../lib/api'
 
+function copyToClipboard(text: string) {
+  navigator.clipboard.writeText(text)
+}
+
 export function Pipeline() {
   const [data, setData] = useState<PipelineData | null>(null)
   const [tab, setTab] = useState<'pending' | 'processed'>('pending')
@@ -10,6 +14,7 @@ export function Pipeline() {
   const [filter, setFilter] = useState('')
   const [cleaning, setCleaning] = useState(false)
   const [cleanResult, setCleanResult] = useState<{ total: number; removed: number; remaining: number; kept: any[]; discarded: any[] } | null>(null)
+  const [copied, setCopied] = useState<string | null>(null)
 
   const load = useCallback(() => { api.pipeline().then(setData) }, [])
   useEffect(() => { load() }, [load])
@@ -48,13 +53,27 @@ export function Pipeline() {
   }
 
   const runAutoFilter = async () => {
-    setCleaning(true)
-    setCleanResult(null)
-    try {
-      const result = await api.autoCleanPipeline()
-      setCleanResult(result)
-      load()
-    } finally { setCleaning(false) }
+    setCleaning(true); setCleanResult(null)
+    try { const r = await api.autoCleanPipeline(); setCleanResult(r); load() }
+    finally { setCleaning(false) }
+  }
+
+  const copyCommand = (url: string, label?: string) => {
+    const cmd = `/career-ops ${url}`
+    copyToClipboard(cmd)
+    setCopied(url)
+    setTimeout(() => setCopied(null), 2000)
+  }
+
+  const copyBatchCommand = () => {
+    if (!data) return
+    const urls = data.pending.filter(p => selected.has(p.url)).map(p => p.url)
+    const cmd = urls.length === 1
+      ? `/career-ops ${urls[0]}`
+      : `/career-ops pipeline`
+    copyToClipboard(cmd)
+    setCopied('batch')
+    setTimeout(() => setCopied(null), 2000)
   }
 
   if (!data) return <div style={{ color: 'var(--tx-3)' }} className="text-sm py-12 text-center">Loading...</div>
@@ -67,14 +86,39 @@ export function Pipeline() {
         <span style={{ color: 'var(--tx-3)' }} className="text-xs">{data.pending.length} pending · {data.processed.length} processed</span>
       </div>
 
+      {/* Evaluate URL manually */}
+      <div className="card p-5 space-y-3">
+        <h2 style={{ color: 'var(--tx-h)' }} className="text-sm font-bold">Evaluate an Offer</h2>
+        <p style={{ color: 'var(--tx-3)' }} className="text-xs">Paste a job URL — copies the CLI command to run the full evaluation with Playwright.</p>
+        <div className="flex gap-2">
+          <input type="text" placeholder="https://jobs.ashbyhq.com/company/..." value={urlInput} onChange={e => setUrlInput(e.target.value)}
+            className="input flex-1 text-sm"
+            onKeyDown={e => { if (e.key === 'Enter' && urlInput.trim()) { copyCommand(urlInput.trim()); setUrlInput('') } }}
+          />
+          <button onClick={() => { if (urlInput.trim()) { copyCommand(urlInput.trim()); setUrlInput('') } }}
+            disabled={!urlInput.trim()}
+            className="px-4 py-2 rounded text-sm font-medium flex-shrink-0 flex items-center gap-1.5"
+            style={{ background: urlInput.trim() ? 'var(--cyan)' : 'var(--ui)', color: urlInput.trim() ? '#fff' : 'var(--tx-3)' }}>
+            <ClipboardIcon />
+            {copied === urlInput.trim() ? 'Copied!' : 'Copy command'}
+          </button>
+        </div>
+        {copied && copied !== 'batch' && (
+          <div className="flex items-center gap-2 p-2 rounded text-xs" style={{ background: 'color-mix(in srgb, var(--green) 10%, var(--bg))', color: 'var(--green)' }}>
+            <span>✓ Copied to clipboard. Paste in your Claude Code terminal:</span>
+            <code style={{ background: 'var(--ui)', padding: '2px 6px', borderRadius: '3px', color: 'var(--tx-h)' }}>
+              /career-ops {copied.length > 50 ? copied.slice(0, 50) + '...' : copied}
+            </code>
+          </div>
+        )}
+      </div>
+
       {/* Auto-filter */}
       <div className="card p-5">
         <div className="flex items-center justify-between">
           <div>
             <h2 style={{ color: 'var(--tx-h)' }} className="text-sm font-bold">Auto-filter by Location</h2>
-            <p style={{ color: 'var(--tx-3)' }} className="text-xs mt-0.5">
-              Checks each URL via HTTP (zero AI tokens). Removes US-only, EU-only, on-site, and closed offers.
-            </p>
+            <p style={{ color: 'var(--tx-3)' }} className="text-xs mt-0.5">Checks URLs via HTTP (zero tokens). Removes US-only, EU-only, on-site, closed.</p>
           </div>
           <button onClick={runAutoFilter} disabled={cleaning}
             className="px-4 py-2 rounded text-sm font-medium flex-shrink-0"
@@ -109,15 +153,13 @@ export function Pipeline() {
             )}
             {cleanResult.discarded.length > 0 && (
               <details className="mt-2">
-                <summary style={{ color: 'var(--red)' }} className="text-xs font-bold uppercase tracking-wider cursor-pointer">
-                  Discarded ({cleanResult.discarded.length}) — click to see
-                </summary>
+                <summary style={{ color: 'var(--red)' }} className="text-xs font-bold uppercase tracking-wider cursor-pointer">Discarded ({cleanResult.discarded.length}) — click to see</summary>
                 <div className="space-y-1 mt-2">
                   {cleanResult.discarded.map((k, i) => (
                     <div key={i} className="flex items-center gap-2 text-xs py-1" style={{ borderBottom: '1px solid var(--ui)', opacity: 0.6 }}>
                       <span className="pill text-xs" style={{ background: 'color-mix(in srgb, var(--red) 10%, var(--bg))', color: 'var(--red)' }}>NO</span>
-                      <span style={{ color: 'var(--tx-2)' }}>{k.company || 'Unknown'}</span>
-                      <span style={{ color: 'var(--tx-3)' }}>— {k.role || 'No role'}</span>
+                      <span>{k.company || 'Unknown'}</span>
+                      <span style={{ color: 'var(--tx-3)' }}>— {k.role || ''}</span>
                       <span style={{ color: 'var(--tx-3)' }} className="ml-auto text-xs">{k.reason}</span>
                     </div>
                   ))}
@@ -126,20 +168,6 @@ export function Pipeline() {
             )}
           </div>
         )}
-      </div>
-
-      {/* Add URLs */}
-      <div className="card p-4 space-y-2">
-        <h2 style={{ color: 'var(--tx-h)' }} className="text-sm font-semibold">Add URLs</h2>
-        <p style={{ color: 'var(--tx-3)' }} className="text-xs">Add individual job posting URLs. To scan full career pages, use <code style={{ background: 'var(--ui)', padding: '1px 4px', borderRadius: '3px' }}>/career-ops scan</code> in CLI.</p>
-        <textarea className="input w-full text-sm" rows={2} placeholder="One job URL per line..." value={urlInput} onChange={e => setUrlInput(e.target.value)} />
-        <div className="flex items-center gap-3">
-          <button onClick={addUrls} disabled={!urlInput.trim()} className="px-3 py-1.5 rounded text-sm font-medium"
-            style={{ background: urlInput.trim() ? 'var(--cyan)' : 'var(--ui)', color: urlInput.trim() ? '#fff' : 'var(--tx-3)' }}>
-            Add
-          </button>
-          {addStatus && <span style={{ color: 'var(--green)' }} className="text-xs">{addStatus}</span>}
-        </div>
       </div>
 
       {/* Tabs + filter */}
@@ -167,12 +195,25 @@ export function Pipeline() {
           {selected.size > 0 && (
             <>
               <span style={{ color: 'var(--tx-3)' }} className="text-xs">{selected.size} selected</span>
-              <button onClick={discardSelected} className="px-3 py-1 rounded text-xs font-medium"
+              <button onClick={copyBatchCommand}
+                className="px-3 py-1 rounded text-xs font-medium flex items-center gap-1"
+                style={{ background: 'var(--cyan)', color: '#fff' }}>
+                <ClipboardIcon />
+                {copied === 'batch' ? 'Copied!' : 'Copy evaluate command'}
+              </button>
+              <button onClick={discardSelected}
+                className="px-3 py-1 rounded text-xs font-medium"
                 style={{ background: 'var(--ui)', color: 'var(--red)' }}>
-                Discard selected
+                Discard
               </button>
             </>
           )}
+        </div>
+      )}
+
+      {copied === 'batch' && (
+        <div className="flex items-center gap-2 p-2 rounded text-xs" style={{ background: 'color-mix(in srgb, var(--green) 10%, var(--bg))', color: 'var(--green)' }}>
+          <span>✓ Copied. Paste in your Claude Code terminal to evaluate {selected.size > 1 ? 'all selected' : 'the offer'}.</span>
         </div>
       )}
 
@@ -197,9 +238,25 @@ export function Pipeline() {
               </div>
               <a href={item.url} target="_blank" rel="noopener noreferrer" style={{ color: 'var(--tx-3)' }} className="text-xs hover:underline truncate block">{item.url}</a>
             </div>
+            {item.status === 'pending' && (
+              <button onClick={() => copyCommand(item.url)}
+                className="px-3 py-1 rounded text-xs font-medium flex-shrink-0 flex items-center gap-1 transition-colors"
+                style={{ background: copied === item.url ? 'var(--green)' : 'var(--ui)', color: copied === item.url ? '#fff' : 'var(--tx-h)' }}>
+                <ClipboardIcon />
+                {copied === item.url ? 'Copied!' : 'Evaluate'}
+              </button>
+            )}
           </div>
         ))}
       </div>
     </div>
+  )
+}
+
+function ClipboardIcon() {
+  return (
+    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+      <rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/>
+    </svg>
   )
 }
