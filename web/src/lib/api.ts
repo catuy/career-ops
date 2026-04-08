@@ -103,6 +103,7 @@ export const api = {
   pipeline: () => get<PipelineData>('/pipeline'),
   addToPipeline: (urls: string[]) => post<{ added: number }>('/pipeline/add', { urls }),
   removeFromPipeline: (urls: string[]) => post<{ removed: number }>('/pipeline/remove', { urls }),
+  autoCleanPipeline: () => post<{ total: number; removed: number; remaining: number; kept: { company: string; role: string; location: string; remoteOk: string; reason: string }[] }>('/pipeline/auto-clean'),
 
   // Reports & PDFs
   reports: () => get<ReportSummary[]>('/reports'),

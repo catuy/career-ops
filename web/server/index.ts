@@ -224,31 +224,41 @@ Execute ALL levels: Greenhouse API + WebSearch. Be thorough.`
   return c.json({ jobId: job.id })
 })
 
-// --- Quick check (fast metadata fetch, no full eval) ---
+// --- Quick location check (direct HTTP, no Claude, zero tokens) ---
 app.post('/api/pipeline/check', async (c) => {
-  const { urls } = await c.req.json() // [{ url, company, role }]
-  const job = createJob('quick-check')
+  const { checkAllLocations } = await import('./services/location-check.js')
+  const pipeline = parsePipeline()
+  const items = pipeline.pending.map(p => ({ url: p.url, company: p.company, role: p.role }))
 
-  const urlList = urls.map((u: any) => `- ${u.url} | ${u.company} | ${u.role}`).join('\n')
+  // Run checks and return results
+  const results = await checkAllLocations(items, () => {})
+  return c.json(results)
+})
 
-  const prompt = `You are a job posting checker. For each URL below, use WebFetch to quickly check the posting and extract:
-- Location: remote/onsite/hybrid, and which regions (US only, Global, LATAM, EU, etc.)
-- Seniority: Junior/Mid/Senior/Staff/Lead/Director
-- Status: Open or Closed (if the page shows no JD, just footer/navbar = closed)
+// Auto-discard NO items from pipeline
+app.post('/api/pipeline/auto-clean', async (c) => {
+  const { checkAllLocations } = await import('./services/location-check.js')
+  const pipeline = parsePipeline()
+  const items = pipeline.pending.map(p => ({ url: p.url, company: p.company, role: p.role }))
 
-The candidate is in Montevideo, Uruguay (UTC-3). They need REMOTE roles only.
+  const results = await checkAllLocations(items, () => {})
+  const toRemove = results.filter(r => r.remoteOk === 'NO').map(r => r.url)
 
-Output a TSV table with columns: url | company | role | location | remote_ok | status
-- remote_ok: YES if candidate could apply from Uruguay, NO if restricted to US/EU only, MAYBE if unclear
-- Keep it concise, one line per URL
+  if (toRemove.length > 0) {
+    removeFromPipeline(toRemove)
+  }
 
-URLs to check:
-${urlList}
-
-IMPORTANT: Output ONLY the TSV table, no other text. Header line first, then data lines.`
-
-  runClaude(job.id, prompt)
-  return c.json({ jobId: job.id })
+  return c.json({
+    total: results.length,
+    removed: toRemove.length,
+    remaining: results.length - toRemove.length,
+    kept: results.filter(r => r.remoteOk !== 'NO').map(r => ({
+      company: r.company, role: r.role, location: r.location, remoteOk: r.remoteOk, reason: r.reason
+    })),
+    discarded: results.filter(r => r.remoteOk === 'NO').map(r => ({
+      company: r.company, role: r.role, location: r.location, reason: r.reason
+    }))
+  })
 })
 
 // --- Batch evaluate ---

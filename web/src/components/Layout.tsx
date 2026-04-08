@@ -3,7 +3,7 @@ import { ThemeToggle } from './ThemeToggle'
 
 const links = [
   { to: '/', label: 'Dashboard' },
-  { to: '/evaluate', label: 'Evaluate' },
+  { to: '/evaluate', label: 'Activity' },
   { to: '/applications', label: 'Applications' },
   { to: '/pipeline', label: 'Pipeline' },
   { to: '/pdfs', label: 'PDFs' },
