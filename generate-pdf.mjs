@@ -69,12 +69,17 @@ async function generatePDF() {
 
   const browser = await chromium.launch({ headless: true });
   const page = await browser.newPage();
+  // Set viewport to match A4 at 72dpi (595px) so CSS renders at correct proportions
+  await page.setViewportSize({ width: 595, height: 842 });
 
-  // Set content with file base URL for any relative resources
-  await page.setContent(html, {
-    waitUntil: 'networkidle',
-    baseURL: `file://${dirname(inputPath)}/`,
-  });
+  // Write modified HTML to a temp file so file:// image paths resolve correctly
+  const tmpHtmlPath = inputPath + '.render.html';
+  const { writeFile: writeTmp } = await import('fs/promises');
+  await writeTmp(tmpHtmlPath, html);
+  await page.goto(`file://${tmpHtmlPath}`, { waitUntil: 'networkidle' });
+  // Clean up temp file after navigation
+  const { unlink } = await import('fs/promises');
+  await unlink(tmpHtmlPath).catch(() => {});
 
   // Wait for fonts to load
   await page.evaluate(() => document.fonts.ready);
@@ -83,13 +88,8 @@ async function generatePDF() {
   const pdfBuffer = await page.pdf({
     format: format,
     printBackground: true,
-    margin: {
-      top: '0.6in',
-      right: '0.6in',
-      bottom: '0.6in',
-      left: '0.6in',
-    },
-    preferCSSPageSize: false,
+    margin: { top: '0', right: '0', bottom: '0', left: '0' },
+    preferCSSPageSize: true,
   });
 
   // Write PDF

@@ -72,9 +72,14 @@ export function ReportView() {
       const match = apps.find(a => a.reportNum === String(reportNum).padStart(3, '0') || a.num === reportNum)
       if (match) setApp(match)
     })
-    // Check if PDF exists
+    // Check if PDF exists — match by company slug from report filename
     api.pdfs().then(pdfs => {
-      const match = pdfs.find(p => p.filename.includes(filename?.match(/^\d+-(.+?)-\d{4}/)?.[1] || '___'))
+      // Extract company slug: "014-automattic-senior-product-designer-2026-04-07" → "automattic"
+      const parts = filename?.replace(/^\d+-/, '').replace(/-\d{4}-\d{2}-\d{2}\.md$/, '').split('-') || []
+      const companySlug = parts[0] || '___'
+      // Try matching: first by full slug, then by company name only
+      const fullSlug = parts.join('-')
+      const match = pdfs.find(p => p.filename.includes(fullSlug)) || pdfs.find(p => p.filename.includes(companySlug))
       if (match) setPdfFile(match)
     })
   }, [filename])

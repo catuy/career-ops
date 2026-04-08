@@ -1,6 +1,11 @@
 import { useEffect, useState, useCallback } from 'react'
 import { Link } from 'react-router-dom'
-import { api, type DashboardData, type PipelineData, type Application } from '../lib/api'
+import { api, type Application, type PipelineData } from '../lib/api'
+
+const HIDDEN = ['Discarded', 'SKIP', 'Descartado']
+const STATUS_MAP: Record<string, string> = { 'Evaluada': 'Pre-approved', 'Aplicado': 'Applied', 'Respondido': 'Responded', 'Entrevista': 'Interview', 'Oferta': 'Offer', 'Rechazado': 'Rejected', 'Descartado': 'Discarded' }
+
+function displayStatus(s: string) { return STATUS_MAP[s] || s }
 
 function Score({ value }: { value: number | null }) {
   if (value === null) return <span style={{ color: 'var(--tx-3)' }}>—</span>
@@ -17,8 +22,6 @@ function Metric({ label, value }: { label: string; value: string | number }) {
   )
 }
 
-const HIDDEN = ['Discarded', 'SKIP', 'Descartado']
-
 function copyCmd(text: string, setCopied: (v: string | null) => void, key: string) {
   navigator.clipboard.writeText(text)
   setCopied(key)
@@ -26,25 +29,26 @@ function copyCmd(text: string, setCopied: (v: string | null) => void, key: strin
 }
 
 export function Dashboard() {
-  const [data, setData] = useState<DashboardData | null>(null)
+  const [apps, setApps] = useState<Application[]>([])
   const [pipeline, setPipeline] = useState<PipelineData | null>(null)
   const [copied, setCopied] = useState<string | null>(null)
 
   const load = useCallback(() => {
-    api.dashboard().then(setData)
+    api.applications().then(setApps)
     api.pipeline().then(setPipeline)
   }, [])
 
   useEffect(() => { load() }, [load])
 
-  if (!data || !pipeline) return <div style={{ color: 'var(--tx-3)' }} className="text-sm py-12 text-center">Loading...</div>
+  if (!pipeline) return <div style={{ color: 'var(--tx-3)' }} className="text-sm py-12 text-center">Loading...</div>
 
-  const activeApps = (data.recentApps.length > 0 ? data.recentApps : [])
-    .concat(data.metrics.topScored.filter(t => !data.recentApps.find(r => r.num === t.num)))
-  // Deduplicate and get all apps
-  const allApps = Array.from(new Map(activeApps.map(a => [a.num, a])).values())
-    .filter(a => !HIDDEN.includes(a.status))
+  const activeApps = apps
+    .filter(a => !HIDDEN.includes(a.status) && !HIDDEN.includes(displayStatus(a.status)))
     .sort((a, b) => (b.score || 0) - (a.score || 0))
+
+  const avgScore = activeApps.length > 0
+    ? Math.round(activeApps.reduce((s, a) => s + (a.score || 0), 0) / activeApps.filter(a => a.score).length * 10) / 10
+    : 0
 
   const discard = async (url: string) => {
     await api.removeFromPipeline([url])
@@ -55,29 +59,30 @@ export function Dashboard() {
     <div className="space-y-8">
       {/* Metrics */}
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
-        <Metric label="Evaluated" value={data.metrics.total} />
-        <Metric label="Avg Score" value={`${data.metrics.avgScore}/5`} />
-        <Metric label="Pre-approved" value={allApps.filter(a => a.status === 'Pre-approved' || a.status === 'Evaluada').length} />
+        <Metric label="Evaluated" value={apps.length} />
+        <Metric label="Avg Score" value={`${avgScore}/5`} />
+        <Metric label="Pre-approved" value={activeApps.filter(a => ['Pre-approved', 'Evaluada'].includes(a.status)).length} />
         <Metric label="Roles Found" value={pipeline.pending.length} />
       </div>
 
       {/* Applications */}
-      {allApps.length > 0 && (
+      {activeApps.length > 0 && (
         <section>
           <div className="flex items-center justify-between mb-3">
-            <h2 style={{ color: 'var(--tx-h)' }} className="text-sm font-bold">Applications</h2>
-            <Link to="/applications" style={{ color: 'var(--blue)' }} className="text-xs hover:underline">View all →</Link>
+            <h2 style={{ color: 'var(--tx-h)' }} className="text-sm font-bold">Applications ({activeApps.length})</h2>
+            <Link to="/applications" style={{ color: 'var(--blue)' }} className="text-xs hover:underline">All applications →</Link>
           </div>
           <div className="card overflow-hidden">
             <table className="data-table">
-              <thead><tr><th>Score</th><th>Company</th><th>Role</th><th>Status</th><th></th></tr></thead>
+              <thead><tr><th>Score</th><th>Company</th><th>Role</th><th>Status</th><th>Date</th><th></th></tr></thead>
               <tbody>
-                {allApps.map(a => (
+                {activeApps.map(a => (
                   <tr key={a.num}>
                     <td><Score value={a.score} /></td>
                     <td style={{ color: 'var(--tx-h)' }} className="font-semibold">{a.company}</td>
                     <td className="text-sm">{a.role}</td>
-                    <td><span className="pill text-xs">{a.status}</span></td>
+                    <td><span className="pill text-xs">{displayStatus(a.status)}</span></td>
+                    <td style={{ color: 'var(--tx-3)' }} className="text-xs">{a.date}</td>
                     <td>
                       {a.reportPath && <Link to={`/reports/${a.reportPath.replace('reports/','')}`} style={{ color: 'var(--blue)' }} className="text-xs hover:underline">View →</Link>}
                     </td>
@@ -89,11 +94,11 @@ export function Dashboard() {
         </section>
       )}
 
-      {/* Roles Found (Pipeline) */}
+      {/* Roles Found */}
       {pipeline.pending.length > 0 && (
         <section>
           <div className="flex items-center justify-between mb-3">
-            <h2 style={{ color: 'var(--tx-h)' }} className="text-sm font-bold">Roles Found</h2>
+            <h2 style={{ color: 'var(--tx-h)' }} className="text-sm font-bold">Roles Found ({pipeline.pending.length})</h2>
             <Link to="/pipeline" style={{ color: 'var(--blue)' }} className="text-xs hover:underline">Manage →</Link>
           </div>
           <div className="space-y-1">

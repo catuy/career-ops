@@ -1,102 +1,105 @@
 # Diego Cataldo
 
-**Full-Stack Designer** — Montevideo, Uruguay
-cataldo.diego@gmail.com | (598) 99 763 146 | [cataldo.pages.dev](https://cataldo.pages.dev) | [LinkedIn](https://linkedin.com/in/cataldodiego/) | [GitHub](https://github.com/catuy)
+**cataldo.diego@gmail.com** | S.Antuña 2667/202, Montevideo, Uruguay | (598) 99 763 146 | [cataldo.pages.dev](https://cataldo.pages.dev)
 
 ---
 
 ## Summary
 
-Diseñador-desarrollador con más de 15 años de experiencia trabajando entre diseño y código. Mi enfoque integra estrategia centrada en las personas, comunicación visual y desarrollo para crear experiencias digitales inclusivas, escalables y con impacto. He liderado la implementación de sistemas de diseño y estrategias de experiencia de usuario para agencias nacionales, plataformas públicas y organismos internacionales. Durante más de diez años fui profesor asociado en FADU/FARTES - UDELAR.
+I'm a hybrid designer-developer with over 15 years of experience at the intersection of design, code, and public service. My work bridges user-centered strategy, visual communication, and front-end development to build inclusive, scalable, and impactful digital experiences.
 
-Como consultor y docente, me enfoco en convertir la complejidad en soluciones claras, accesibles y significativas. Creo en el diseño como una herramienta para promover la claridad, equidad y la innovación.
+I've led design systems and UX strategies for national agencies, public platforms, and international organizations. For over a decade, I also served as an Associate Professor in UX/UI and final projects at Uruguay's main public university (FADU/UDELAR), mentoring hundreds of students and contributing to academic juries and research.
 
----
-
-## Experience
-
-### Senior Product Designer (Consultant) — ClassWallet (US Fintech)
-2023 – Present | Remote
-
-Senior Product Designer en ClassWallet, fintech estadounidense enfocada en financiamiento educativo. Responsabilidades incluyen definición de estrategia de producto, diseño de flujos complejos de usuario y desarrollo de un sistema de diseño coherente y alineado con los objetivos de la compañía. Colaboración estrecha con equipos internos de producto e ingeniería para garantizar consistencia, accesibilidad y escalabilidad en toda la plataforma.
-
-### UX Lead for Uruguay — Inter-American Development Bank (IDB)
-2022 – Present | Remote
-
-Referente en UX para las iniciativas de transformación digital del BID en Uruguay. Asesoramiento especializado en usabilidad y estrategia de diseño para plataformas digitales del sector público, asegurando alineación con estándares internacionales y objetivos institucionales de impacto.
-
-### Product Design & Development Consultant — UNESCO-IOC / GOOS
-2025 – Present | Remote
-
-Led the design and development of the Interactive Ocean Observing Report Card, featuring interactive data visualizations and a React-based web platform.
-
-### Senior UX Consultant — ANII (National Agency for Research and Innovation)
-2014 – 2023 | Uruguay
-
-Durante casi una década, consultor clave en UX para ANII, la agencia nacional de innovación de Uruguay. Lideró el rediseño de su ecosistema digital, desarrollando su sistema de diseño y mejorando la usabilidad de las plataformas orientadas al público. Trabajo centrado en accesibilidad, coherencia de interfaces y mejoras centradas en las personas para promover transparencia y participación en los procesos de financiamiento a la innovación.
-
-### Associate Professor — FADU, Universidad de la República
-2013 – 2023 | Uruguay
-
-Acompañó a estudiantes en el desarrollo de desafíos complejos, integró tribunales de evaluación final y participó en investigaciones académicas e interdisciplinarias centradas en la innovación, la comunicación y la práctica del diseño.
-
-### Independent Consultant — Visual Communication & UX/UI
-2005 – Present | Remote
-
-Diseño y desarrollo de experiencias digitales para una amplia variedad de clientes, incluyendo instituciones públicas, ONG y marcas globales como Wix, Coca-Cola y Unilever. Trabajo combina estrategia, diseño y ejecución técnica, con fuerte enfoque en sistemas de diseño, paneles de control, portales institucionales y herramientas creativas.
+As a consultant and educator, I bring a strong ability to structure complexity into accessible and engaging tools. I believe in design as a vehicle for clarity, equity, and innovation.
 
 ---
 
-## Notable Projects
+## Relevant Education
 
-- **UNESCO Ocean Observing Report Card** — Interactive data visualization platform (React)
-- **ANII Digital Ecosystem** — Uruguay's first government design system
-- **PRISMA** — National innovation indicators portal
-- **Monitor Cannabis** — Cannabis policy monitoring platform with identity system
-- **Brecha Weekly** — Redesign of Uruguay's leading independent media outlet
-- **Búsqueda** — Digital transformation for major political journalism platform
-- **ClassWallet Design System** — Education finance platform design system
-- **Gwick** — Digital gift card platform (native app lead designer)
-- **Jacobin** — UX/UI consulting for international publication
+2010 - Bachelor's Degree in Graphic Design - Universidad ORT Uruguay
 
 ---
 
-## Education
+## Experience Highlights
 
-2010 — Licenciatura en Diseño Gráfico — Universidad ORT Uruguay
+### Senior Product Designer (Consultant) - ClassWallet (US-based Fintech)
+2023-Present | Remote
+
+I work as a Senior Product Designer for ClassWallet, a U.S.-based fintech focused on educational funding. My responsibilities include defining product strategy, designing complex user flows, and developing a cohesive design system aligned with business objectives. I collaborate closely with internal product and engineering teams to ensure design consistency, accessibility, and scalability across the platform.
+
+Tags: Fintech, UX Strategy, Design Systems, Accessibility
+
+### UX Reference in Uruguay - Inter-American Development Bank (IDB)
+2022 | Remote
+
+I served as a UX advisor for the Inter-American Development Bank's digital transformation initiatives in Uruguay. I provide expert guidance on usability and design strategy for public digital platforms, ensuring alignment with international standards and institutional impact goals.
+
+Tags: International Cooperation, UX Strategy, Public Sector, Usability, Advisory
+
+### Senior UX Consultant - ANII (National Agency for Research and Innovation)
+2014-2023 | Uruguay
+
+For nearly a decade, I have been a key UX consultant for ANII, Uruguay's national innovation agency. I led the redesign of their digital ecosystem, creating their design system and improving the usability of public-facing platforms. My work focused on accessibility, interface consistency, and user-centered improvements to support transparency and engagement in innovation funding processes.
+
+Tags: Public Sector, UX Design, Design Systems, Accessibility, Digital Transformation
+
+### Associate Professor - FADU, University of the Republic
+2013-2023 | Uruguay
+
+For over 10 years, I taught final-year design projects at Uruguay's main public design school. I mentored students through complex, real-world challenges, served as a jury member for final evaluations, and contributed to academic and interdisciplinary research initiatives focused on innovation, communication, and design practice.
+
+Tags: Design Education, Mentorship, Lecturer, Jury Participation, Research
+
+### Independent Consultant - Visual Communication & UX/UI
+2005-Present | International
+
+As an independent consultant, I've designed and delivered digital experiences for a wide range of clients, including public institutions, NGOs, and global brands such as Wix, Coca-Cola, and Unilever. My work combines strategy, design, and technical execution, with a strong emphasis on design systems, dashboards, institutional portals, and creative tools.
+
+Tags: Consulting, Interface Design, Design + Code, Creative Tools, Brand Experience
 
 ---
 
-## Exhibitions & Awards
+## Core Skills
 
-- 2023 — International Printmaking Biennial — Museu do Douro, Portugal
-- 2022 — International Print Exhibition — National Taiwan Museum of Fine Arts
-- 2021 — "30 Seconds Museum" — Neo Shibuya, Tokyo
-- 2017 — Ibero-American Design Biennial — Plaza Matadero, Madrid
-- 2017 — Museum of Design and Fashion (MUDE) — Lisbon
-- 2016 — Venice Architecture Biennale — Uruguay Pavilion
-- 2010 — Tipos Latinos Typography Biennial — Latin America
-- 2010 — American Design Awards — GDUSA, USA
+UX/UI Design, Interaction Design, Prototyping (Figma), Data Visualization, Design + Code, Design Systems and Documentation, Responsive & Accessible Interfaces (WCAG), HTML5 CSS3 JavaScript (Frameworks), GitHub Collaboration + Dev Handoff, Strategic Communication for Public Sector
 
 ---
 
-## Publications & Speaking
+## Selected Exhibitions & Awards
 
-- 2016 — Latam Congress of Interdisciplinary Higher Education — CCE, Uruguay
-- 2015–2023 — Final Project Jury — FADU, Universidad de la República
-- 2013 — "ZM — Fotógrafos y Poetas" — Editorial Yaugurú
-- 2011–2012 — Jury Member — FADU Visual Identity Competitions
-- 2010 — "20×20 Designers Compilation" — Editorial Yaugurú
-- 2010 — "Typography in Uruguay" — Universidad ORT
+- 2023 - Intl. Printmaking Biennial - Museu do Douro, Portugal
+- 2022 - Intl. Print Exhibit - National Taiwan Museum of Fine Arts, Taiwan
+- 2021 - "30 Seconds Museum" - Neo Shibuya, Tokyo
+- 2017 - Ibero-American Design Biennial - Plaza Matadero, Madrid
+- 2017 - Museum of Design and Fashion - MUDE, Lisbon
+- 2016 - Venice Architecture Biennale - Uruguay Pavilion, Venice
+- 2010 - Tipos Latinos Typography Biennial - Latin America
+- 2010 - American Design Awards - GDUSA, USA
+
+Tags: Portugal, Taiwan, Mexico, Japan, USA, Spain, Italy, Latin America
 
 ---
 
-## Skills
+## Publications & Talks
 
-**Design & Strategy:** Product strategy, design systems, UX/UI design, wireframing, user research, market analysis, accessibility (WCAG), art direction, branding, user flows
+- 2016 - Latam Congress of Interdisciplinary Higher Education - CCE, Uruguay
+- 2015-2023 - Final Project Jury - FADU, University of the Republic, Uruguay
+- 2013 - "ZM - Photographers and Poets" - Editorial Yauguru, Uruguay/Spain
+- 2011-2012 - Jury Member - FADU Visual Identity Competitions (Gen12/14), Uruguay
+- 2010 - "20x20 Designers Compilation" - Editorial Yauguru, Uruguay/Argentina
+- 2010 - "Typography in Uruguay" - ORT University, Uruguay
+- 2010 - "Web Design Index" - The Pepin Press, Netherlands
 
-**Development:** HTML, CSS, JavaScript, React, Tailwind CSS, responsive design, Storybook, data visualization, creative coding (p5.js)
+---
 
-**Tools:** Figma, Sketch, Adobe Creative Suite, Storybook, p5.js
+## Tools & Technologies
 
-**Languages:** Spanish (native), English (professional)
+Figma, Adobe Creative Suite, GitHub, HTML, CSS, JavaScript, p5.js, HTML5 CSS3 JavaScript (Frameworks)
+
+---
+
+## References
+
+- **David Koplovitz** - CTO ClassWallet - [LinkedIn](https://linkedin.com)
+- **Juanto Romang** - VP Engineering ClassWallet - [LinkedIn](https://linkedin.com)
+- **Juan Possamay** - IT Manager ANII - [LinkedIn](https://linkedin.com)

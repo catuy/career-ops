@@ -1,24 +1,34 @@
-# Modo: pdf — Generación de PDF ATS-Optimizado
+# Modo: pdf - CV Personalizado
 
-## Pipeline completo
+## Critical Rules
 
-1. Lee `cv.md` como fuentes de verdad
-2. Pide al usuario el JD si no está en contexto (texto o URL)
-3. Extrae 15-20 keywords del JD
-4. Detecta idioma del JD → idioma del CV (EN default)
-5. Detecta ubicación empresa → formato papel:
-   - US/Canada → `letter`
-   - Resto del mundo → `a4`
-6. Detecta arquetipo del rol → adapta framing
-7. Reescribe Professional Summary inyectando keywords del JD + exit narrative bridge ("Built and sold a business. Now applying systems thinking to [domain del JD].")
-8. Selecciona top 3-4 proyectos más relevantes para la oferta
-9. Reordena bullets de experiencia por relevancia al JD
-10. Construye competency grid desde requisitos del JD (6-8 keyword phrases)
-11. Inyecta keywords naturalmente en logros existentes (NUNCA inventa)
-12. Genera HTML completo desde template + contenido personalizado
-13. Escribe HTML a `/tmp/cv-candidate-{company}.html`
-14. Ejecuta: `node generate-pdf.mjs /tmp/cv-candidate-{company}.html output/cv-candidate-{company}-{YYYY-MM-DD}.pdf --format={letter|a4}`
-15. Reporta: ruta del PDF, nº páginas, % cobertura de keywords
+1. **cv.md is the source of truth.** The content, structure, tone, and descriptions in cv.md are Diego's actual words. Preserve them.
+2. **Minimal modifications only.** When personalizing for a JD, you may:
+   - Rewrite the Summary (3 paragraphs) to bridge toward the role
+   - Reorder experience blocks by relevance to the JD
+   - Adjust tags per experience to match JD keywords
+   - Add a "Curriculum Vitae / Application for [Role] - [Company]" subtitle
+3. **Do NOT rewrite experience descriptions.** They are already polished. Only make minor word swaps if a JD keyword is a direct synonym (e.g., "user experience" to "UX").
+4. **Never use the em dash character.** Use " - " (space hyphen space) instead.
+5. **Write like a human.** No AI-sounding phrases. No "leveraging", "spearheading", "passionate about". Diego's tone is direct, clear, and humble. Match it.
+6. **All sections from cv.md must appear.** The full structure is: Header, Subtitle, Summary + Photo, Education, Experience (all roles), Core Skills, Exhibitions & Awards, Publications & Talks, Tools & Technologies, References.
+7. **Photo is required.** Use `file:///Users/diego/www/career-ops/templates/photo.png`
+
+## Pipeline
+
+1. Read `cv.md` as source of truth
+2. Read JD (from context, URL, or ask user)
+3. Extract 15-20 keywords from JD
+4. Detect language (EN default) and paper format (US = letter, else = a4)
+5. Detect archetype and decide which experience to put on page 1
+6. Write Summary: 3 paragraphs, bridging Diego's background to the JD. Use Diego's voice from cv.md as baseline, not generic rewrites.
+7. Select which experience goes on page 1 (most relevant to JD) vs page 2+
+8. Adjust Core Skills tags to include JD keywords (but keep existing relevant ones)
+9. Adjust per-experience tags to echo JD vocabulary
+10. Generate HTML from `templates/cv-template.html` with all placeholders
+11. Write to `/tmp/cv-diego-cataldo-{company}.html`
+12. Run: `node generate-pdf.mjs /tmp/cv-diego-cataldo-{company}.html output/cv-diego-cataldo-{company}-{YYYY-MM-DD}.pdf --format={letter|a4}`
+13. Report: path, pages, keyword coverage
 
 ## Reglas ATS (parseo limpio)
 
