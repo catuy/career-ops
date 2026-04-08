@@ -2,11 +2,9 @@ import { NavLink, Outlet } from 'react-router-dom'
 import { ThemeToggle } from './ThemeToggle'
 
 const links = [
-  { to: '/', label: 'Dashboard' },
-  { to: '/evaluate', label: 'Activity' },
+  { to: '/', label: 'Home' },
   { to: '/applications', label: 'Applications' },
   { to: '/pipeline', label: 'Pipeline' },
-  { to: '/pdfs', label: 'PDFs' },
   { to: '/config', label: 'Config' },
 ]
 

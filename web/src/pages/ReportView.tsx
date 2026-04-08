@@ -2,9 +2,9 @@ import { useEffect, useState } from 'react'
 import { useParams, Link } from 'react-router-dom'
 import Markdown from 'react-markdown'
 import remarkGfm from 'remark-gfm'
-import { api, type Application } from '../lib/api'
+import { api, type Application, type PDFFile } from '../lib/api'
 
-const STATUSES = ['Evaluada', 'Applied', 'Responded', 'Interview', 'Offer', 'Rejected', 'Discarded', 'SKIP']
+const STATUSES = ['Pre-approved', 'Applied', 'Responded', 'Interview', 'Offer', 'Rejected', 'Discarded', 'SKIP']
 
 interface ReportMeta {
   company: string; role: string; date: string; archetype: string; score: number | null; url: string; pdf: string
@@ -41,7 +41,7 @@ function ScoreRing({ score }: { score: number | null }) {
   )
 }
 
-const sections: Record<string, { label: string; color: string }> = {
+const sectionInfo: Record<string, { label: string; color: string }> = {
   A: { label: 'Role Summary', color: 'var(--cyan)' },
   B: { label: 'CV Match', color: 'var(--green)' },
   C: { label: 'Level & Strategy', color: 'var(--purple)' },
@@ -51,23 +51,31 @@ const sections: Record<string, { label: string; color: string }> = {
   G: { label: 'Draft Answers', color: 'var(--green)' },
 }
 
+function copyToClipboard(text: string) { navigator.clipboard.writeText(text) }
+
 export function ReportView() {
   const { filename } = useParams<{ filename: string }>()
   const [content, setContent] = useState<string | null>(null)
   const [error, setError] = useState(false)
   const [app, setApp] = useState<Application | null>(null)
   const [statusSaved, setStatusSaved] = useState(false)
+  const [pdfFile, setPdfFile] = useState<PDFFile | null>(null)
+  const [showPdf, setShowPdf] = useState(false)
+  const [copied, setCopied] = useState<string | null>(null)
 
-  // Extract report number from filename (e.g., "014-automattic..." → 14)
   const reportNum = filename ? parseInt(filename.match(/^(\d+)/)?.[1] || '0') : 0
 
   useEffect(() => {
     if (!filename) return
     api.report(filename).then(r => setContent(r.content)).catch(() => setError(true))
-    // Find matching application
     api.applications().then(apps => {
       const match = apps.find(a => a.reportNum === String(reportNum).padStart(3, '0') || a.num === reportNum)
       if (match) setApp(match)
+    })
+    // Check if PDF exists
+    api.pdfs().then(pdfs => {
+      const match = pdfs.find(p => p.filename.includes(filename?.match(/^\d+-(.+?)-\d{4}/)?.[1] || '___'))
+      if (match) setPdfFile(match)
     })
   }, [filename])
 
@@ -79,15 +87,22 @@ export function ReportView() {
     setTimeout(() => setStatusSaved(false), 2000)
   }
 
-  if (error) return <div className="text-center py-16"><p style={{ color: 'var(--red)' }}>Report not found</p><Link to="/applications" style={{ color: 'var(--blue)' }} className="text-sm hover:underline mt-2 inline-block">← Back</Link></div>
+  const handleCopy = (text: string, key: string) => {
+    copyToClipboard(text)
+    setCopied(key)
+    setTimeout(() => setCopied(null), 2000)
+  }
+
+  if (error) return <div className="text-center py-16"><p style={{ color: 'var(--red)' }}>Report not found</p><Link to="/" style={{ color: 'var(--blue)' }} className="text-sm hover:underline mt-2 inline-block">Back</Link></div>
   if (content === null) return <div style={{ color: 'var(--tx-3)' }} className="text-sm py-16 text-center">Loading...</div>
 
   const { meta, body } = extractMeta(content)
   const parts = body.split(/(?=\n## [A-G]\))/).filter(s => s.trim())
+  const statusDisplay = app ? ({'Evaluada': 'Pre-approved'}[app.status] || app.status) : ''
 
   return (
     <div className="space-y-5">
-      <Link to="/applications" style={{ color: 'var(--tx-3)' }} className="text-sm hover:underline inline-block">← Back</Link>
+      <Link to="/" style={{ color: 'var(--tx-3)' }} className="text-sm hover:underline inline-block">← Back</Link>
 
       {/* Hero */}
       <div className="card p-5">
@@ -108,21 +123,15 @@ export function ReportView() {
                   Job posting
                 </a>
               )}
-              {meta.pdf && (
-                <a href={`/files/${meta.pdf}`} target="_blank" rel="noopener noreferrer" style={{ color: 'var(--green)' }} className="hover:underline flex items-center gap-1">
+              {pdfFile && (
+                <button onClick={() => setShowPdf(!showPdf)} style={{ color: 'var(--green)' }} className="hover:underline flex items-center gap-1 text-sm">
                   <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
-                  Download CV
-                </a>
+                  {showPdf ? 'Hide CV' : 'View CV'}
+                </button>
               )}
               {app && (
                 <div className="flex items-center gap-2 ml-auto">
-                  <span style={{ color: 'var(--tx-3)' }} className="text-xs">Status:</span>
-                  <select
-                    value={app.status}
-                    onChange={e => handleStatusChange(e.target.value)}
-                    className="input text-xs py-1 px-2"
-                    style={{ minWidth: '120px' }}
-                  >
+                  <select value={app.status} onChange={e => handleStatusChange(e.target.value)} className="input text-xs py-1 px-2" style={{ minWidth: '130px' }}>
                     {STATUSES.map(s => <option key={s} value={s}>{s}</option>)}
                   </select>
                   {statusSaved && <span style={{ color: 'var(--green)' }} className="text-xs">Saved</span>}
@@ -133,27 +142,60 @@ export function ReportView() {
         </div>
       </div>
 
+      {/* PDF preview */}
+      {showPdf && pdfFile && (
+        <div className="card overflow-hidden" style={{ height: '70vh' }}>
+          <iframe src={`/files/output/${pdfFile.filename}`} className="w-full h-full" title="CV PDF" />
+        </div>
+      )}
+
+      {/* Prepare Application CTA */}
+      <div className="card p-5">
+        <h2 style={{ color: 'var(--tx-h)' }} className="text-sm font-bold mb-2">Prepare Application</h2>
+        <p style={{ color: 'var(--tx-3)' }} className="text-xs mb-3">Generate a tailored CV and draft application answers for this role.</p>
+        <div className="flex gap-2 flex-wrap">
+          {!pdfFile && (
+            <button onClick={() => handleCopy(`/career-ops pdf ${meta.url}`, 'pdf')}
+              className="px-4 py-2 rounded text-sm font-medium flex items-center gap-1.5"
+              style={{ background: copied === 'pdf' ? 'var(--green)' : 'var(--cyan)', color: '#fff' }}>
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+              {copied === 'pdf' ? 'Copied!' : 'Generate CV (copy CLI command)'}
+            </button>
+          )}
+          <button onClick={() => handleCopy(`/career-ops apply ${meta.url}`, 'apply')}
+            className="px-4 py-2 rounded text-sm font-medium flex items-center gap-1.5"
+            style={{ background: copied === 'apply' ? 'var(--green)' : 'var(--blue)', color: '#fff' }}>
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+            {copied === 'apply' ? 'Copied!' : 'Fill application form (copy CLI command)'}
+          </button>
+        </div>
+        {(copied === 'pdf' || copied === 'apply') && (
+          <div className="mt-2 p-2 rounded text-xs" style={{ background: 'color-mix(in srgb, var(--green) 10%, var(--bg))', color: 'var(--green)' }}>
+            Paste the command in your Claude Code terminal.
+          </div>
+        )}
+      </div>
+
       {/* Section nav */}
       <nav className="flex gap-1 overflow-x-auto">
         {parts.map((sec, i) => {
           const letter = sec.match(/## ([A-G])\)/)?.[1]
-          const info = letter ? sections[letter] : null
+          const info = letter ? sectionInfo[letter] : null
           if (!info) return null
           return (
             <a key={i} href={`#section-${letter}`}
-              className="px-3 py-1.5 rounded text-xs font-medium whitespace-nowrap transition-colors"
-              style={{ color: info.color, background: `color-mix(in srgb, ${info.color} 8%, var(--bg))` }}
-            >
+              className="px-3 py-1.5 rounded text-xs font-medium whitespace-nowrap"
+              style={{ color: info.color, background: `color-mix(in srgb, ${info.color} 8%, var(--bg))` }}>
               {letter}) {info.label}
             </a>
           )
         })}
       </nav>
 
-      {/* Content sections */}
+      {/* Sections */}
       {parts.map((sec, i) => {
         const letter = sec.match(/## ([A-G])\)/)?.[1]
-        const info = letter ? sections[letter] : null
+        const info = letter ? sectionInfo[letter] : null
         const sectionBody = info ? sec.replace(/^## [A-G]\)[^\n]*\n/, '') : sec
         const isKeywords = /## Keywords/i.test(sec)
 
@@ -174,8 +216,7 @@ export function ReportView() {
 
         return (
           <section key={i} id={`section-${letter}`} className="card overflow-hidden"
-            style={info ? { borderLeft: `3px solid ${info.color}` } : {}}
-          >
+            style={info ? { borderLeft: `3px solid ${info.color}` } : {}}>
             {info && (
               <div className="px-5 py-3 flex items-center gap-2" style={{ borderBottom: '1px solid var(--ui)' }}>
                 <span className="text-xs font-bold uppercase tracking-wider" style={{ color: info.color }}>{letter})</span>
